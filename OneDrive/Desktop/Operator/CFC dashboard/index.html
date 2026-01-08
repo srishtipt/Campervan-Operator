@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #ffffff;
+}
+
+/* LEFT SIDEBAR */
+.sidebar {
+    width: 220px;
+    height: 100vh;
+    background: #e9f7e9;
+    padding: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.sidebar img {
+    width: 120px;
+    margin-bottom: 20px;
+}
+
+.menu-item {
+    padding: 12px;
+    margin-bottom: 4px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.menu-item:hover {
+    background: #d4f7d4;
+}
+
+.dropdown-arrow {
+    float: right;
+    font-size: 12px;
+}
+
+/* DROPDOWN CONTENT */
+.dropdown-content {
+    display: none;
+    margin-left: 10px;
+}
+
+.dropdown-content div {
+    padding: 8px;
+    margin: 4px 0;
+    cursor: pointer;
+}
+
+.dropdown-content div:hover {
+    background: #c6f5c6;
+}
+
+/* TOP BAR */
+.top {
+    margin-left: 240px;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.top-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.top-right img {
+    width: 28px;
+    cursor: pointer;
+}
+
+/* MAIN CONTENT */
+.main {
+    margin-left: 240px;
+    padding: 20px 40px;
+}
+
+/* PROFILE TEXT */
+.profile-title {
+    font-size: 29px;
+    font-weight: bold;
+    margin-top: -40px;
+}
+
+.profile-sub {
+    margin-top: 5px;
+}
+
+/* SERVICES row */
+.services-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 40px;
+}
+
+.dropdown-btn {
+    background: linear-gradient(to right, #26d98c, #2bb673);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: -60px;
+}
+
+.dropdown-services {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-services-content {
+    display: none;
+    position: absolute;
+    top: 45px;
+    width: 140px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0px 3px 8px rgba(0,0,0,0.2);
+}
+
+.dropdown-services-content div {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.dropdown-services-content div:hover {
+    background: #e8ffe8;
+}
+
+/* CARDS GRID */
+.grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 22px;
+    margin-top: 25px;
+}
+
+.card {
+    flex: 1;
+    min-width: 280px;
+    height: 120px;
+    padding: 18px;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    font-size: 25px;
+}
+
+.bright { opacity: 1; }
+.faded { opacity: 0.45; }
+
+/* GRAPH BOX */
+.graph-box {
+    width: 100%;
+    background: #ebfaf2;
+    padding: 25px;
+    margin-top: 30px;
+    border-radius: 12px;
+}
+
+/* CANVAS FULL WIDTH */
+#myChart {
+    width: 100% !important;
+    height: 330px !important;
+}
+
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+
+    <img src="logo.png">
+
+    <div class="menu-item">Dashboard</div>
+    <div class="menu-item">Service Management</div>
+    <div class="menu-item">Booking</div>
+    <div class="menu-item">Feature Package</div>
+
+    <!-- Revenue dropdown -->
+    <div class="menu-item" onclick="toggleDropdown('rev-dd')">
+        Revenue <span class="dropdown-arrow">▼</span>
+    </div>
+    <div id="rev-dd" class="dropdown-content">
+        <div>Caravan Revenue</div>
+        <div>CFC Revenue</div>
+    </div>
+
+    <!-- Support Center dropdown -->
+    <div class="menu-item" onclick="toggleDropdown('sup-dd')">
+        Support Center <span class="dropdown-arrow">▼</span>
+    </div>
+    <div id="sup-dd" class="dropdown-content">
+        <div>Account</div>
+        <div>Logout</div>
+    </div>
+
+</div>
+
+<div class="top">
+    <div></div>
+    <div class="top-right">
+        <img src="bell.png">
+        <img src="profile.png">
+    </div>
+</div>
+
+<div class="main">
+
+    <div class="profile-title">MONKEY : TV005</div>
+
+    <div class="profile-sub"><b>Profile Created :</b> Jan. 10, 2025, 6:48 p.m</div>
+    <div class="profile-sub"><b>Location :</b> IITM</div>
+
+    <br>
+
+    <div class="services-row">
+        <h2>SERVICES</h2>
+
+        <div class="dropdown-services">
+            <button class="dropdown-btn" onclick="toggleServices()">Caravan ▼</button>
+
+            <div id="services-menu" class="dropdown-services-content">
+                <div onclick="changeService('Caravan')">Caravan</div>
+                <div onclick="changeService('CFC')">CFC</div>
+                <div onclick="changeService('Hotel')">Hotel</div>
+                <div onclick="changeService('Resort')">Resort</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- GRID -->
+    <div class="grid">
+
+        <div class="card bright" style="background:#e8fafa">
+            <b>Caravan</b><br>
+            <span style="font-size:22px;color:#26b69a">1</span>
+        </div>
+
+        <div class="card faded" style="background:#fff9e8">
+            <b>CFC</b><br>
+            <span style="font-size:22px;color:#ffb84d">1</span>
+        </div>
+
+        <div class="card bright" style="background:#ffefe2">
+            <b>Total Booking</b><br>
+            <span style="font-size:35px;color:#ff7b1a"><b>5</b></span><br>
+            <small>Increased By 7%</small>
+        </div>
+
+        <div class="card faded" style="background:#ffefef">
+            <b>Hotel</b><br>
+            <span style="font-size:22px;color:#ff9b8a">0</span>
+        </div>
+
+        <div class="card faded" style="background:#fff2fa">
+            <b>Resort</b><br>
+            <span style="font-size:22px;color:#ff9b8a">0</span>
+        </div>
+
+        <div class="card bright" style="background:#ffeafb">
+            <b>Waiting Approval</b><br>
+            <span style="font-size:35px;color:#ff33b5"><b>0</b></span>
+        </div>
+
+    </div>
+
+    <!-- GRAPH -->
+    <div class="graph-box">
+        <canvas id="myChart"></canvas>
+    </div>
+
+</div>
+
+<!-- CHART JS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+function toggleDropdown(id) {
+    document.getElementById(id).style.display =
+    document.getElementById(id).style.display === "block" ? "none" : "block";
+}
+
+function toggleServices() {
+    let box = document.getElementById("services-menu");
+    box.style.display = box.style.display === "block" ? "none" : "block";
+}
+
+function changeService(name) {
+    document.querySelector(".dropdown-btn").innerHTML = name + " ▼";
+    document.getElementById("services-menu").style.display = "none";
+}
+
+/* GRAPH */
+const ctx = document.getElementById('myChart').getContext('2d');
+
+new Chart(ctx, {
+    type: "line",
+    data: {
+        labels: ["January","February","March","April","May","June","July"],
+        datasets: [
+            {
+                label: "Campervan",
+                data: [200000, 300000, 250000, 230000, 220000, 260000, 310000],
+                borderColor: "#007bff",
+                backgroundColor: "#007bff",
+                tension: 0.4,
+                pointRadius: 5
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            y: { ticks: { color: "black" }}
+        }
+    }
+});
+</script>
+
+</body>
+</html>
+<br>

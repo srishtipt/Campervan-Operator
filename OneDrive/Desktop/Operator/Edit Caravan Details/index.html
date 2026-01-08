@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Operators - Caravan Management</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f7fa;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 280px;
+            height: 100vh;
+            background: #ffffff;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 25px;
+            box-shadow: 3px 0 10px rgba(0,0,0,0.05);
+        }
+
+        .sidebar-logo img {
+            width: 160px;
+            display: block;
+            margin: 0 auto 25px auto;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .sidebar-menu li {
+            padding: 14px 18px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 10px;
+            color: #555;
+        }
+
+        .sidebar-menu li:hover {
+            background: #f2f2f2;
+        }
+
+        .sidebar-menu li.active {
+            background: #2ecc71;
+            color: white;
+        }
+
+        /* HEADER */
+        .header {
+            background: white;
+            padding: 22px 40px;
+            margin-left: 280px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+        }
+
+        .header h1 {
+            color: #2ecc71;
+            font-size: 30px;
+        }
+
+        .profile-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .profile-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            margin-left: 300px;
+            margin-top: 40px;
+            margin-bottom: 60px;
+        }
+
+        .flat-title {
+            font-size: 27px;
+            margin-bottom: 30px;
+        }
+
+        /* OPERATOR SECTION */
+        .operator-section {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+        }
+
+        .operator-name {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .star-icon {
+            font-size: 18px;
+            color: gold;
+            margin-left: 8px;
+        }
+
+        .op-line {
+            display: flex;
+            font-size: 20px;
+            margin-bottom: 12px;
+            margin-top: 17px;
+        }
+
+        .colon {
+            margin: 0 10px;
+        }
+
+        /* RIGHT OPERATOR */
+        .right-operator {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            margin-right: 100px;
+        }
+
+        .button-row {
+            display: flex;
+            justify-content: flex-end;
+            gap: 18px;
+            margin-bottom: 18px;
+            margin-right: 0px;
+            margin-top: -60px;
+        }
+
+        .img-btn {
+            width: 160px;
+            height: auto;
+            cursor: pointer;
+        }
+
+        /* 2 COLUMN GRID FOR QA ROWS */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px 60px;
+            margin-bottom: 40px;
+        }
+
+        .qa-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .q-label {
+            font-size: 20px;
+            flex: 1;
+            max-width: 240px;
+        }
+
+        /* ✅ q-line (unchanged thickness) */
+        .q-line {
+            flex: 1;
+            height: 2px;
+            background: #2ecc71;
+            margin-left: 40px;
+            margin-right: 60px;
+            display: block;
+        }
+
+        /* IMAGE ICON AT END OF LINE */
+        .q-img {
+            width: 26px;
+            height: 26px;
+            cursor: pointer;
+        }
+
+        /* DESCRIPTION */
+        .desc-title {
+            font-size: 20px;
+            margin-top: 25px;
+        }
+
+        .desc-small {
+            font-size: 17px;
+            margin-bottom: 10px;
+            margin-top: 10px;
+        }
+
+        .desc-textbox {
+            width: 100%;
+            height: 80px;
+            border: 1px solid #2ecc71;
+            border-radius: 5px;
+            margin-bottom: 35px;
+        }
+
+        /* SECTION HEADINGS */
+        .section-big-title {
+            text-align: center;
+            font-size: 30px;
+            margin: 40px 0 10px;
+            margin-top: 0px;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 26px;
+            font-weight: 600;
+            margin-top: 20px;
+        }
+
+        .upload-small {
+            text-align: center;
+            font-size: 17px;
+            color: #777;
+            margin-top: 10px;
+            margin-bottom: 30px;
+        }
+
+        /* FULLSCREEN POPUP */
+        #imgPopup {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #imgPopup img {
+            max-width: 75%;
+            max-height: 75%;
+            border-radius: 10px;
+            box-shadow: 0 0 20px #000;
+        }
+
+        /* RESPONSIVE FIXES */
+        @media (max-width: 900px) {
+            .two-col {
+                grid-template-columns: 1fr;
+            }
+            .qa-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .q-line {
+                width: 100%;
+                margin-left: 0;
+                margin-top: 8px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+            .header {
+                margin-left: 0;
+                padding: 18px;
+            }
+            .sidebar {
+                display: none;
+            }
+        }
+
+    </style>
+
+    <!-- Material Icons (kept as in your file) -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" />
+</head>
+
+<body>
+
+    <!-- POPUP OVERLAY -->
+    <div id="imgPopup" onclick="closePopup()">
+        <img id="popupImage" src="" alt="Preview">
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="sidebar-logo">
+            <img src="logo.png" alt="Logo">
+        </div>
+
+        <ul class="sidebar-menu">
+            <li>Dashboard</li>
+            <li class="active">Operators</li>
+            <li>Feature Package</li>
+            <li>Advertisement</li>
+            <li>Bookings</li>
+            <li>Customers</li>
+            <li class="dropdown">Revenue ▼</li>
+            <li class="dropdown">Settings ▼</li>
+        </ul>
+    </div>
+
+    <!-- HEADER -->
+    <div class="header">
+        <div>
+            <h1>Operators</h1>
+            <p>Manage and oversee your team for smooth operations</p>
+        </div>
+
+        <div class="profile-icon">
+            <img src="profile.png">
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+
+        <h2 class="flat-title">Caravanh ID : CRVHN000011</h2>
+
+        <!-- OPERATOR SECTION -->
+        <div class="operator-section">
+
+            <div class="left-operator">
+                <h2 class="operator-name">
+                    Monkey <span class="star-icon">⭐ 0.0</span>
+                </h2>
+
+                <div class="op-line"><span>Operator ID</span><span class="colon">:</span><span>TK007</span></div>
+                <div class="op-line"><span>Owner Name</span><span class="colon">:</span><span>Zest</span></div>
+                <div class="op-line"><span>Address</span><span class="colon">:</span><span>IITM</span></div>
+            </div>
+
+            <div class="right-operator">
+
+                <div class="button-row">
+                    <img src="call.png" class="img-btn">
+                    <img src="message.png" class="img-btn">
+                </div>
+
+                <div class="op-line"><span>Phone Number</span><span class="colon">:</span><span>9345474210</span></div>
+                <div class="op-line"><span>Alternative Number</span><span class="colon">:</span><span>9732145721</span></div>
+                <div class="op-line"><span>Email ID</span><span class="colon">:</span><span>monkey@gmail.com</span></div>
+            </div>
+
+        </div>
+
+        <!-- CAMPERVAN DETAILS -->
+        <h2 class="section-big-title">Campervan Details</h2><br><br>
+
+        <div class="two-col">
+            <div class="qa-row">
+                <span class="q-label">Vehicle Type</span>
+                <div class="q-line"></div>
+                <img src="image-icon.png" class="q-img" onclick="showImage('image-icon.png')">
+            </div>
+            <div class="qa-row">
+                <span class="q-label">Sleeping Capacity</span>
+                <div class="q-line"></div>
+                <img src="image-icon.png" class="q-img" onclick="showImage('image-icon.png')">
+            </div>
+
+            <div class="qa-row">
+                <span class="q-label">Vehicle Number</span>
+                <div class="q-line"></div>
+                <img src="image-icon.png" class="q-img" onclick="showImage('image-icon.png')">
+            </div>
+            <div class="qa-row">
+                <span class="q-label">Display Images</span>
+                <div class="q-line"></div>
+                <img src="image-icon.png" class="q-img" onclick="showImage('image-icon.png')">
+            </div>
+
+            <div class="qa-row">
+                <span class="q-label">Registration Details</span>
+                <div class="q-line"></div>
+                <img src="image-icon.png" class="q-img" onclick="showImage('image-icon.png')">
+            </div>
+            <div class="qa-row">
+                <span class="q-label">State</span>
+                <div class="q-line"></div>
+                <img src="image-icon.png" class="q-img" onclick="showImage('image-icon.png')">
+            </div>
+
+            <div class="qa-row">
+                <span class="q-label">Seating Capacity</span>
+                <div class="q-line"></div>
+                <img src="image-icon.png" class="q-img" onclick="showImage('image-icon.png')">
+            </div>
+            <div class="qa-row">
+                <span class="q-label">City</span>
+                <div class="q-line"></div>
+                <img src="image-icon.png" class="q-img" onclick="showImage('image-icon.png')">
+            </div>
+
+            <div class="qa-row">
+                <span class="q-label">Seating Images</span>
+                <div class="q-line"></div>
+                <img src="image-icon.png" class="q-img" onclick="showImage('image-icon.png')">
+            </div>
+        </div>
+
+        <!-- DESCRIPTION -->
+        <h3 class="desc-title">CAMPERVAN / DESCRIPTION FOR THE CAMPER</h3>
+        <p class="desc-small">Give detailed description about the Campervan like facilities etc.</p>
+        <textarea class="desc-textbox"></textarea>
+
+        <!-- AMENITIES -->
+        <h2 class="section-big-title">Extra Amenities</h2>
+
+        <!-- BEDROOM -->
+        <h3 class="subtitle">Bedroom</h3>
+        <p class="upload-small">Upload the photo of the amenities</p><br><br>
+
+        <div class="two-col">
+            <div class="qa-row">
+                <span class="q-label">Sleeping bed (in build)</span>
+                <div class="q-line"></div>
+                <img src="image-icon.png" class="q-img" onclick="showImage('image-icon.png')">
+            </div>
+            <div class="qa-row">
+                <span class="q-label">Moon roof / Sun roof</span>
+                <div class="q-line"></div>
+                <img src="image-icon.png" class="q-img" onclick="showImage('image-icon.png')">
+            </div>
+
+            <div class="qa-row">
+                <span class="q-label">Sleeping bed pop up</span>
+                <div class="q-line"></div>
+                <img src="image-icon.png" class="q-img" onclick="showImage('image-icon.png')">
+            </div>
+            <div class="qa-row">
+                <span class="q-label">Fan</span>
+                <div class="q-line"></div>
+                <img src="image-icon.png" class="q-img" onclick="showImage('image-icon.png')">
+            </div>
+
+            <div class="qa-row">
+                <span class="q-label">Sleeping Sofa</span>
+                <div class="q-line"></div>
+                <img src="image-icon.png" class="q-img" onclick="showImage('image-icon.png')">
+            </div>
+            <div class="qa-row">
+                <span class="q-label">Air Conditioner</span>
+                <div class="q-line"></div>
+                <img src="image-icon.png" class="q-img" onclick="showImage('image-icon.png')">
+            </div>
+
+            <div class="qa-row">
+                <span class="q-label">Mobile charging point</span>
+                <div class="q-line"></div>
+                <img src="image-icon.png" class="q-img" onclick="showImage('image-icon.png')">
+            </div>
+        </div>
+
+        <!-- BATHROOM -->
+        <h3 class="subtitle">Bathroom</h3>
+        <p class="upload-small">Upload the photo of the amenities</p><br><br>
+
+        <div class="two-col">
+            <div class="qa-row">
+                <span class="q-label">Bathroom</span>
+                <div class="q-line"></div>
+                <img src="image-icon.png" class="q-img" onclick="showImage('image-icon.png')">
+            </div>
+            <div class="qa-row">
+                <span class="q-label">Fresh Water Tank</span>
+                <div class="q-line"></div>
+                <img src="image-icon.png" class="q-img" onclick="showImage('image-icon.png')">
+            </div>
+
+            <div class="qa-row">
+                <span class="q-label">Shower (Internal/External)</span>
+                <div class="q-line"></div>
+                <img src="image-icon.png" class="q-img" onclick="showImage('image-icon.png')">
+            </div>
+            <div class="qa-row">
+                <span class="q-label">Fresh Water</span>
+                <div class="q-line"></div>
+                <img src="image-icon.png" class="q-img" onclick="showImage('image-icon.png')">
+            </div>
+
+            <div class="qa-row">
+                <span class="q-label">Waste Water Disposal</span>
+                <div class="q-line"></div>
+                <img src="image-icon.png" class="q-img" onclick="showImage('image-icon.png')">
+            </div>
+            <div class="qa-row">
+                <span class="q-label">Grey Water</span>
+                <div class="q-line"></div>
+                <img src="image-icon.png" class="q-img" onclick="showImage('image-icon.png')">
+            </div>
+        </div>
+
+        <!-- KITCHEN -->
+        <h3 class="subtitle">Kitchen</h3>
+        <p class="upload-small">Upload the photo of the amenities</p><br><br>
+
+        <div class="two-col">
+            <div class="qa-row">
+                <span class="q-label">Micro Stove</span>
+                <div class="q-line"></div>
+                <img src="image-icon.png" class="q-img" onclick="showImage('image-icon.png')">
+            </div>
+            <div class="qa-row">
+                <span class="q-label">Refrigerator</span>
+                <div class="q-line"></div>
+                <img src="image-icon.png" class="q-img" onclick="showImage('image-icon.png')">
+            </div>
+
+            <div class="qa-row">
+                <span class="q-label">Kitchen(inside)</span>
+                <div class="q-line"></div>
+                <img src="image-icon.png" class="q-img" onclick="showImage('image-icon.png')">
+            </div>
+            <div class="qa-row">
+                <span class="q-label">Kitchen(external)</span>
+                <div class="q-line"></div>
+                <img src="image-icon.png" class="q-img" onclick="showImage('image-icon.png')">
+            </div>
+        </div>
+
+        <!-- LIVING ROOM -->
+        <h3 class="subtitle">Living Room</h3>
+        <p class="upload-small">Upload the photo of the amenities</p><br><br>
+
+        <div class="two-col">
+            <div class="qa-row">
+                <span class="q-label">Entertainment System</span>
+                <div class="q-line"></div>
+                <img src="image-icon.png" class="q-img" onclick="showImage('image-icon.png')">
+            </div>
+            <div class="qa-row">
+                <span class="q-label">Dinner Table</span>
+                <div class="q-line"></div>
+                <img src="image-icon.png" class="q-img" onclick="showImage('image-icon.png')">
+            </div>
+
+            <div class="qa-row">
+                <span class="q-label">Television</span>
+                <div class="q-line"></div>
+                <img src="image-icon.png" class="q-img" onclick="showImage('image-icon.png')">
+            </div>
+            <div class="qa-row">
+                <span class="q-label">Couplee Friendly</span>
+                <div class="q-line"></div>
+                <img src="image-icon.png" class="q-img" onclick="showImage('image-icon.png')">
+            </div>
+
+            <div class="qa-row">
+                <span class="q-label">Pet Friendly</span>
+                <div class="q-line"></div>
+                <img src="image-icon.png" class="q-img" onclick="showImage('image-icon.png')">
+            </div>
+        </div>
+
+        <!-- OTHER FACILITIES -->
+        <h3 class="subtitle">Other Facilities</h3>
+        <p class="upload-small">Upload the photo of the amenities</p><br><br>
+
+        <div class="two-col">
+            <div class="qa-row">
+                <span class="q-label">WFI Security Camera</span>
+                <div class="q-line"></div>
+                <img src="image-icon.png" class="q-img" onclick="showImage('image-icon.png')">
+            </div>
+            <div class="qa-row">
+                <span class="q-label">Battery & Inverter</span>
+                <div class="q-line"></div>
+                <img src="image-icon.png" class="q-img" onclick="showImage('image-icon.png')">
+            </div>
+
+            <div class="qa-row">
+                <span class="q-label">Parking Assist</span>
+                <div class="q-line"></div>
+                <img src="image-icon.png" class="q-img" onclick="showImage('image-icon.png')">
+            </div>
+            <div class="qa-row">
+                <span class="q-label">Iron Box</span>
+                <div class="q-line"></div>
+                <img src="image-icon.png" class="q-img" onclick="showImage('image-icon.png')">
+            </div>
+
+            <div class="qa-row">
+                <span class="q-label">Camping Tent</span>
+                <div class="q-line"></div>
+                <img src="image-icon.png" class="q-img" onclick="showImage('image-icon.png')">
+            </div>
+            <div class="qa-row">
+                <span class="q-label">Camping Accessories</span>
+                <div class="q-line"></div>
+                <img src="image-icon.png" class="q-img" onclick="showImage('image-icon.png')">
+            </div>
+
+            <div class="qa-row">
+                <span class="q-label">Chautter Driver</span>
+                <div class="q-line"></div>
+                <img src="image-icon.png" class="q-img" onclick="showImage('image-icon.png')">
+            </div>
+            <div class="qa-row">
+                <span class="q-label">Awning</span>
+                <div class="q-line"></div>
+                <img src="image-icon.png" class="q-img" onclick="showImage('image-icon.png')">
+            </div>
+        </div>
+
+        <!-- PRICING -->
+        <h2 class="section-big-title">Pricing</h2><br><br>
+
+        <div class="two-col">
+            <div class="qa-row">
+                <span class="q-label">Select Fixed Kms</span>
+                <div class="q-line"></div>
+                <img src="image-icon.png" class="q-img" onclick="showImage('image-icon.png')">
+            </div>
+            <div class="qa-row">
+                <span class="q-label">Price Per Night</span>
+                <div class="q-line"></div>
+                <img src="image-icon.png" class="q-img" onclick="showImage('image-icon.png')">
+            </div>
+
+            <div class="qa-row">
+                <span class="q-label">Extra Kms. Rate</span>
+                <div class="q-line"></div>
+                <img src="image-icon.png" class="q-img" onclick="showImage('image-icon.png')">
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function showImage(src) {
+            document.getElementById('popupImage').src = src;
+            document.getElementById('imgPopup').style.display = 'flex';
+        }
+
+        function closePopup() {
+            document.getElementById('imgPopup').style.display = 'none';
+        }
+    </script>
+
+</body>
+</html>

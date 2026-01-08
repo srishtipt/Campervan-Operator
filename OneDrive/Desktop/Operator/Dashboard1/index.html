@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Caravan Dashboard</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Inter", sans-serif;
+    }
+
+    body {
+        background: #ffffff;
+        display: flex;
+    }
+
+    /* ================ SIDEBAR ================ */
+    .sidebar {
+        width: 260px;
+        background: #eaf7e9;
+        padding: 20px;
+        height: 100vh;
+        position: fixed;
+        left: 0;
+        top: 0;
+    }
+
+    .sidebar-logo {
+        width: 140px;
+        margin-bottom: 25px;
+    }
+
+    .menu-item {
+        padding: 12px 15px;
+        margin-bottom: 8px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 17px;
+        font-weight: 500;
+    }
+
+    .menu-item:hover {
+        background: #32cd7a;
+        color: white;
+    }
+
+    .active {
+        background: linear-gradient(90deg, #32d49e, #16b37c);
+        color: white;
+    }
+
+    /* ================ MAIN AREA ================ */
+    .main {
+        margin-left: 240px;      /* same as sidebar width */
+        width: calc(100% - 240px);
+        min-height: 100vh;
+        padding: 24px 32px 40px 32px;
+    }
+
+    /* TOP RIGHT ICONS */
+    .top-icons {
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .top-icons img {
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+    }
+
+    .profile-icon {
+        width: 50px !important;
+        height: 50px;
+        border-radius: 50%;
+    }
+
+    /* ============ TOP SECTION (TITLE + SERVICES) ============ */
+    .top-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        margin-top: 40px;
+    }
+
+    .title-block h2 {
+        font-size: 35px;
+        font-weight: 700;
+        margin-bottom: 6px;
+        margin-top: 40px;
+    }
+
+    .title-block p {
+        font-size: 18px;
+        margin: 2px 0;
+    }
+
+    .services-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .services-label {
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+    .services-select {
+        background: linear-gradient(90deg, #32d49e, #16b37c);
+        border-radius: 12px;
+        border: none;
+        padding: 9px 22px;
+        color: #ffffff;
+        font-weight: 600;
+        font-size: 18px;
+        cursor: pointer;
+        appearance: none;
+        position: relative;
+    }
+
+    /* little ▼ arrow using pseudo-element */
+    .services-select-wrapper {
+        position: relative;
+    }
+    .services-select-wrapper::after {
+        content: "▾";
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-52%);
+        color: #ffffff;
+        font-size: 20px;
+        pointer-events: none;
+    }
+
+    .services-select option {
+        color: #000;
+    }
+
+    /* ================ STATS GRID ================ */
+    .stats-container {
+        margin-top: 28px;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 25px;
+        width: 100%;
+    }
+
+    .stat-box {
+        padding: 20px 22px;
+        border-radius: 14px;
+        min-height: 115px;
+    }
+
+    .stat-title {
+        font-size: 20px;
+        font-weight: 600;
+    }
+
+    .stat-number {
+        font-size: 40px;
+        font-weight: 700;
+        margin-top: 10px;
+    }
+
+    /* individual colors */
+    .box-caravan { background: #f2fffc; }
+    .box-cfc     { background: #fff8e6; }
+    .box-total   { background: #fff1e6; }
+    .box-hotel   { background: #ffece8; }
+    .box-resort  { background: #ffeef9; }
+    .box-wait    { background: #ffe8f5; }
+
+    .caravan-num { color: #10b674; }
+    .cfc-num     { color: #f7a600; }
+    .total-num   { color: #ff7b00; }
+    .hotel-num   { color: #ff6600; }
+    .resort-num  { color: #ff2bbb; }
+    .wait-num    { color: #ff22b2; }
+
+    .increase-text {
+        font-size: 15px;
+        margin-top: -8px;
+        color: #444;
+    }
+
+    /* ================ GRAPH SECTION ================ */
+    .graph-container {
+        margin-top: 30px;
+        width: 100%;
+        background: #effff7;
+        padding: 24px 24px 30px 24px;
+        border-radius: 16px;
+    }
+
+    canvas {
+        width: 100% !important;
+        height: 360px !important;
+    }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <img src="logo.png" alt="Logo" class="sidebar-logo">
+
+    <div class="menu-item active">Dashboard</div>
+    <div class="menu-item">Service Management</div>
+    <div class="menu-item">Booking</div>
+    <div class="menu-item">Feature Package</div>
+    <div class="menu-item">Revenue ▼</div>
+    <div class="menu-item">Support Center ▼</div>
+</div>
+
+<!-- MAIN AREA -->
+<div class="main">
+
+    <!-- TOP RIGHT ICONS -->
+    <div class="top-icons">
+        <img src="bell.png" alt="Bell">
+        <img src="profile.png" alt="Profile" class="profile-icon">
+    </div>
+
+    <!-- TOP SECTION -->
+    <div class="top-section">
+        <div class="title-block">
+            <h2>MONKEY : TV005</h2>
+            <p><b>Profile Created :</b> Jan. 10, 2025, 6:48 p.m</p>
+            <p><b>Location :</b> IITM</p>
+        </div>
+
+        <div class="services-wrapper">
+            <span class="services-label">SERVICES</span>
+            <div class="services-select-wrapper">
+                <select class="services-select">
+                    <option>Caravan</option>
+                    <option>CFC</option>
+                    <option>Hotel</option>
+                    <option>Resort</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- STATS GRID -->
+    <div class="stats-container">
+
+        <div class="stat-box box-caravan">
+            <div class="stat-title">Caravan</div>
+            <div class="stat-number caravan-num">1</div>
+        </div>
+
+        <div class="stat-box box-cfc">
+            <div class="stat-title">CFC</div>
+            <div class="stat-number cfc-num">2</div>
+        </div>
+
+        <div class="stat-box box-total">
+            <div class="stat-title">Total Booking</div>
+            <div class="stat-number total-num">5</div>
+            <div class="increase-text">Increased By 7%</div>
+        </div>
+
+        <div class="stat-box box-hotel">
+            <div class="stat-title">Hotel</div>
+            <div class="stat-number hotel-num">1</div>
+        </div>
+
+        <div class="stat-box box-resort">
+            <div class="stat-title">Resort</div>
+            <div class="stat-number resort-num">1</div>
+        </div>
+
+        <div class="stat-box box-wait">
+            <div class="stat-title">Waiting Approval</div>
+            <div class="stat-number wait-num">0</div>
+        </div>
+
+    </div>
+
+    <!-- GRAPH SECTION -->
+    <div class="graph-container">
+        <canvas id="caravanChart"></canvas>
+    </div>
+
+</div>
+
+<script>
+const ctx = document.getElementById('caravanChart').getContext('2d');
+
+new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: ['January','February','March','April','May','June','July'],
+        datasets: [
+            {
+                label: 'Campervan',
+                data: [200000,300000,250000,280000,220000,240000,350000],
+                borderColor: '#007bff',
+                backgroundColor: 'transparent',
+                tension: 0.4,
+                borderWidth: 3,
+                pointRadius: 5
+            },
+            {
+                label: 'CFC',
+                data: [180000,350000,300000,230000,340000,360000,410000],
+                borderColor: '#00c853',
+                backgroundColor: 'transparent',
+                tension: 0.4,
+                borderWidth: 3,
+                pointRadius: 5
+            },
+            {
+                label: 'Hotel',
+                data: [150000,250000,350000,380000,210000,250000,330000],
+                borderColor: '#d500f9',
+                backgroundColor: 'transparent',
+                tension: 0.4,
+                borderWidth: 3,
+                pointRadius: 5
+            },
+            {
+                label: 'Resort',
+                data: [170000,220000,260000,300000,230000,290000,320000],
+                borderColor: '#ff9100',
+                backgroundColor: 'transparent',
+                tension: 0.4,
+                borderWidth: 3,
+                pointRadius: 5
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top',
+                labels: {
+                    usePointStyle: true
+                }
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: false,
+                ticks: { font: { size: 11 } }
+            },
+            x: {
+                ticks: { font: { size: 11 } }
+            }
+        }
+    }
+});
+</script>
+
+</body>
+</html>

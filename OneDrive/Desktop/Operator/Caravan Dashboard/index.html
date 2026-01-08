@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Inter",sans-serif;
+}
+
+body{
+    background:#ffffff;
+    display:flex;
+}
+
+/* ================= SIDEBAR ================= */
+.sidebar{
+    width:240px;
+    background:#eaf7e9;
+    padding:22px;
+    height:100vh;
+    position:fixed;
+    left:0;
+    top:0;
+}
+
+.sidebar-logo{
+    width:150px;
+    margin-bottom:25px;
+}
+
+.menu-item{
+    padding:12px 15px;
+    margin-bottom:8px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:14px;
+    font-weight:500;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.menu-item:hover{
+    background:#32cd7a;
+    color:#fff;
+}
+
+.active{
+    background:linear-gradient(90deg,#32d49e,#16b37c);
+    color:#fff;
+}
+
+/* support center submenu */
+.submenu{
+    margin-left:15px;
+    margin-top:4px;
+    display:none;
+}
+
+.submenu-item{
+    padding:8px 12px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:13px;
+}
+
+.submenu-item:hover{
+    background:linear-gradient(90deg,#32d49e,#16b37c);
+    color:#fff;
+}
+
+/* ================= MAIN ================= */
+.main{
+    margin-left:240px;
+    width:calc(100% - 240px);
+    padding:30px;
+    position:relative;
+}
+
+/* top right icons */
+.top-icons{
+    position:absolute;
+    top:25px;
+    right:40px;
+    display:flex;
+    align-items:center;
+    gap:22px;
+}
+
+.top-icons img{
+    width:26px;
+    height:26px;
+    cursor:pointer;
+}
+
+.profile-icon{
+    width:34px!important;
+    height:34px;
+    border-radius:50%;
+}
+
+/* ================= TOP SECTION ================= */
+.top-section{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:15px;
+}
+
+.title-block h2{
+    font-size:22px;
+    font-weight:700;
+}
+
+.title-block p{
+    font-size:14px;
+    margin-top:6px;
+}
+
+.services-section{
+    display:flex;
+    align-items:center;
+    gap:18px;
+}
+
+.services-label{
+    font-size:18px;
+    font-weight:700;
+}
+
+/* custom SERVICES dropdown */
+.services-dropdown{
+    position:relative;
+}
+
+.dropdown-btn{
+    background:linear-gradient(90deg,#32d49e,#16b37c);
+    padding:10px 22px;
+    color:#fff;
+    font-weight:600;
+    border-radius:10px;
+    border:none;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    cursor:pointer;
+    font-size:14px;
+}
+
+.dropdown-btn span.arrow{
+    font-size:12px;
+}
+
+.dropdown-menu{
+    position:absolute;
+    right:0;
+    top:110%;
+    background:#ffffff;
+    border-radius:8px;
+    box-shadow:0 4px 14px rgba(0,0,0,0.15);
+    overflow:hidden;
+    min-width:140px;
+    display:none;
+    z-index:10;
+}
+
+.dropdown-option{
+    padding:8px 12px;
+    font-size:14px;
+    cursor:pointer;
+}
+
+.dropdown-option:hover{
+    background:#f2f2f2;
+}
+
+/* ================= STAT BOXES ================= */
+.stats-grid{
+    margin-top:30px;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+}
+
+/* bright vs faded cards */
+.bright-card{
+    box-shadow:0 6px 18px rgba(0,0,0,0.04);
+}
+
+.faded-card{
+    opacity:0.55;
+}
+
+.stat-box{
+    padding:20px;
+    border-radius:14px;
+    min-height:110px;
+}
+
+.stat-title{
+    font-size:15px;
+    font-weight:600;
+}
+
+.stat-number{
+    font-size:32px;
+    font-weight:700;
+    margin-top:5px;
+}
+
+/* background colors */
+.box-caravan{ background:#e6faf6; }
+.box-cfc{ background:#fff8e6; }
+.box-total{ background:#fff1e6; }
+.box-hotel{ background:#ffece8; }
+.box-resort{ background:#ffeef9; }
+.box-wait{ background:#ffe8f5; }
+
+/* text colors */
+.c1{ color:#00b38f; }
+.c2{ color:#f7a600; }
+.c3{ color:#ff7b00; }
+.c4{ color:#ff6600; }
+.c5{ color:#ff2bbb; }
+.c6{ color:#ff22b2; }
+
+.increase-text{
+    font-size:12px;
+    margin-top:-6px;
+}
+
+/* ================= GRAPH ================= */
+.graph-container{
+    margin-top:30px;
+    width:100%;
+    background:#e6faf6;
+    padding:22px;
+    border-radius:16px;
+}
+
+.graph-header{
+    font-size:14px;
+    margin-bottom:10px;
+    display:flex;
+    align-items:center;
+    gap:6px;
+}
+
+.graph-dot{
+    width:14px;
+    height:14px;
+    border-radius:50%;
+    border:3px solid #008cff;
+    background:#fff;
+}
+
+canvas{
+    width:100%!important;
+    height:330px!important;
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <img src="logo.png" class="sidebar-logo" alt="logo">
+
+    <div class="menu-item active">Dashboard</div>
+    <div class="menu-item">Service Management</div>
+    <div class="menu-item">Booking</div>
+    <div class="menu-item">Feature Package</div>
+    <div class="menu-item">
+        <span>Revenue</span><span>▼</span>
+    </div>
+
+    <!-- Support Center dropdown -->
+    <div class="menu-item" id="supportToggle">
+        <span>Support Center</span>
+        <span id="supportArrow">▼</span>
+    </div>
+    <div class="submenu" id="supportMenu">
+        <div class="submenu-item">Account</div>
+        <div class="submenu-item">Logout</div>
+    </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+
+    <!-- Top-right icons -->
+    <div class="top-icons">
+        <img src="bell.png" alt="bell">
+        <img src="profile.png" class="profile-icon" alt="profile">
+    </div>
+
+    <!-- Header section -->
+    <div class="top-section">
+        <div class="title-block">
+            <h2>MONKEY : TV005</h2>
+            <p><b>Profile Created :</b> Jan. 10, 2025, 6:48 p.m</p>
+            <p><b>Location :</b> IITM</p>
+        </div>
+
+        <div class="services-section">
+            <span class="services-label">SERVICES</span>
+
+            <!-- SERVICES dropdown -->
+            <div class="services-dropdown">
+                <button class="dropdown-btn" id="servicesBtn">
+                    <span id="servicesCurrent">Caravan</span>
+                    <span class="arrow">▾</span>
+                </button>
+                <div class="dropdown-menu" id="servicesMenu">
+                    <div class="dropdown-option" data-value="Caravan">Caravan</div>
+                    <div class="dropdown-option" data-value="Hotel">Hotel</div>
+                    <div class="dropdown-option" data-value="Resort">Resort</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stat cards -->
+    <div class="stats-grid">
+        <!-- BRIGHT: Caravan -->
+        <div class="stat-box box-caravan bright-card">
+            <div class="stat-title">Caravan</div>
+            <div class="stat-number c1">1</div>
+        </div>
+
+        <!-- FADED: CFC -->
+        <div class="stat-box box-cfc faded-card">
+            <div class="stat-title">CFC</div>
+            <div class="stat-number c2">1</div>
+        </div>
+
+        <!-- BRIGHT: Total Booking -->
+        <div class="stat-box box-total bright-card">
+            <div class="stat-title">Total Booking</div>
+            <div class="stat-number c3">5</div>
+            <div class="increase-text">Increased By 7%</div>
+        </div>
+
+        <!-- FADED: Hotel -->
+        <div class="stat-box box-hotel faded-card">
+            <div class="stat-title">Hotel</div>
+            <div class="stat-number c4">0</div>
+        </div>
+
+        <!-- FADED: Resort -->
+        <div class="stat-box box-resort faded-card">
+            <div class="stat-title">Resort</div>
+            <div class="stat-number c5">0</div>
+        </div>
+
+        <!-- BRIGHT: Waiting Approval -->
+        <div class="stat-box box-wait bright-card">
+            <div class="stat-title">Waiting Approval</div>
+            <div class="stat-number c6">0</div>
+        </div>
+    </div>
+
+    <!-- Graph section -->
+    <div class="graph-container">
+        <div class="graph-header">
+            <span class="graph-dot"></span>
+            <span>Campervan</span>
+        </div>
+        <canvas id="myChart"></canvas>
+    </div>
+
+</div>
+
+<script>
+/* ===== Support Center dropdown ===== */
+const supportToggle = document.getElementById("supportToggle");
+const supportMenu = document.getElementById("supportMenu");
+const supportArrow = document.getElementById("supportArrow");
+
+supportToggle.addEventListener("click", () => {
+    const isOpen = supportMenu.style.display === "block";
+    supportMenu.style.display = isOpen ? "none" : "block";
+    supportArrow.textContent = isOpen ? "▼" : "▲";
+});
+
+/* ===== SERVICES dropdown ===== */
+const servicesBtn = document.getElementById("servicesBtn");
+const servicesMenu = document.getElementById("servicesMenu");
+const servicesCurrent = document.getElementById("servicesCurrent");
+
+servicesBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    servicesMenu.style.display = servicesMenu.style.display === "block" ? "none" : "block";
+});
+
+document.querySelectorAll(".dropdown-option").forEach(opt => {
+    opt.addEventListener("click", () => {
+        const value = opt.getAttribute("data-value");
+        servicesCurrent.textContent = value;
+        servicesMenu.style.display = "none";
+    });
+});
+
+document.addEventListener("click", () => {
+    servicesMenu.style.display = "none";
+});
+
+/* ===== Chart.js line graph (exact style) ===== */
+const ctx = document.getElementById("myChart");
+
+new Chart(ctx, {
+    type: "line",
+    data: {
+        labels: ["January","February","March","April","May","June","July"],
+        datasets: [{
+            label: "",
+            data: [200000,260000,270000,260000,240000,260000,280000],
+            borderColor: "#008cff",
+            borderWidth: 2,
+            tension: 0.25,
+            pointRadius: 4,
+            pointBackgroundColor: "#008cff",
+            pointBorderColor: "#ffffff",
+            pointBorderWidth: 2,
+            fill: false
+        }]
+    },
+    options: {
+        plugins: {
+            legend: { display:false }
+        },
+        scales: {
+            x: {
+                grid: { color: "rgba(0,0,0,0.05)" },
+                ticks:{ font:{ size:10 } }
+            },
+            y: {
+                beginAtZero:false,
+                grid:{ color:"rgba(0,0,0,0.06)" },
+                ticks:{ font:{ size:10 } }
+            }
+        }
+    }
+});
+</script>
+
+</body>
+</html>
