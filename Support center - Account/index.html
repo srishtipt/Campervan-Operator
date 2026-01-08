@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Page</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #ffffff;
+        }
+
+        /* ---- SIDEBAR ---- */
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background: #eaf7e9;
+            padding-top: 20px;
+            position: fixed;
+            left: 0;
+            top: 0;
+        }
+
+        .logo {
+            width: 200px;
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        .menu-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            border-radius: 6px;
+            margin: 6px 10px;
+        }
+
+        .menu-item:hover {
+            background: linear-gradient(90deg, #33d17a, #2ec4b6);
+            color: white;
+        }
+
+        .active-menu {
+            background: linear-gradient(90deg, #33d17a, #2ec4b6);
+            color: white;
+        }
+
+        .dropdown-arrow {
+            float: right;
+            font-size: 16px;
+            margin-top: 4px;
+        }
+
+        .dropdown-content {
+            display: none;
+            margin-left: 15px;
+        }
+
+        .dropdown-content div {
+            padding: 10px 20px;
+            font-size: 19px;
+            border-radius: 5px;
+            margin: 5px 0;
+        }
+
+        .dropdown-content div:hover {
+            background: linear-gradient(90deg, #33d17a, #2ec4b6);
+            color: white;
+        }
+
+        /* ---- TOP NAV ---- */
+        .top-nav {
+            height: 70px;
+            background: white;
+            position: fixed;
+            left: 250px;
+            right: 0;
+            top: 0;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding-right: 30px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .icon {
+            width: 28px;
+            margin-left: 20px;
+            cursor: pointer;
+        }
+
+        .profile-pic {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            cursor: pointer;
+            margin-left: 20px;
+        }
+
+        /* ---- MAIN CONTENT ---- */
+        .content {
+            margin-left: 250px;
+            margin-top: 90px;
+            padding: 30px;
+        }
+
+        .title {
+            font-size: 40px;
+            font-weight: bold;
+            margin-top: 30px;
+        }
+
+        .info {
+            margin-top: 10px;
+            font-size: 19px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+
+        <img src="logo.png" class="logo">
+
+        <div class="menu-item">Dashboard</div>
+        <div class="menu-item">Service Management</div>
+        <div class="menu-item">Booking</div>
+        <div class="menu-item">Feature Package</div>
+
+        <!-- Revenue Dropdown -->
+        <div class="menu-item" onclick="toggleDropdown('revDD')">
+            Revenue <span class="dropdown-arrow">▼</span>
+        </div>
+        <div id="revDD" class="dropdown-content">
+            <div>Revenue 1</div>
+            <div>Revenue 2</div>
+        </div>
+
+        <!-- Support Center Dropdown -->
+        <div class="menu-item" onclick="toggleDropdown('suppDD')">
+            Support Center <span class="dropdown-arrow">▼</span>
+        </div>
+        <div id="suppDD" class="dropdown-content">
+            <div class="active-menu">Account</div>
+            <div>Logout</div>
+        </div>
+    </div>
+
+    <!-- TOP NAV -->
+    <div class="top-nav">
+        <img src="bell.png" class="icon">
+        <img src="profile.png" class="profile-pic">
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="content">
+        <div class="title">MONKEY : TV005</div>
+
+        <div class="info"><strong>Profile Created :</strong> Jan. 10, 2025, 6:48 p.m</div>
+        <div class="info"><strong>Location :</strong> IITM</div>
+
+        <br>
+
+        <div class="info"><strong>Admin Email :</strong> contact@campervanfactory.com</div>
+        <div class="info"><strong>Admin contact :</strong> 09677033633</div>
+    </div>
+
+<script>
+    function toggleDropdown(id) {
+        let dd = document.getElementById(id);
+        dd.style.display = dd.style.display === "block" ? "none" : "block";
+    }
+</script>
+
+</body>
+</html>

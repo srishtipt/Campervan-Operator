@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Account</title>
+
+<style>
+    *{
+        margin:0;
+        padding:0;
+        box-sizing:border-box;
+        font-family:"Poppins", sans-serif;
+    }
+
+    body{
+        background:#f5f5f5;
+    }
+
+    h1{
+        text-align:center;
+        font-size:40px;
+        font-weight:600;
+        margin-top: 40px;
+    }
+
+    .subtitle{
+        text-align:center;
+        margin-top:8px;
+        color:#666;
+        margin-bottom:40px;
+        font-size:20px;
+    }
+
+    h2{
+        font-size:35px;
+        margin-top:30px;
+        margin-bottom:5px;
+        font-weight:600;
+        margin-left:20px;
+    }
+
+    .small{
+        font-size:16px;
+        color:#777;
+        margin-bottom:25px;
+        margin-left:20px;
+    }
+
+    /* LABEL LEFT + INPUT RIGHT */
+    .field{
+        display:flex;
+        align-items:center;
+        margin-bottom:22px;
+    }
+
+    .label{
+        width:40%;
+        font-size:15px;
+        color:#333;
+    }
+
+    .input{
+        width:55%;
+        padding:12px 15px;
+        border:1px solid #b4e0c0;
+        border-radius:6px;
+        outline:none;
+        font-size:15px;
+        height:50px;
+    }
+
+    .file-box{
+        width:55%;
+        border:1px solid #b4e0c0;
+        border-radius:6px;
+        padding:10px 12px;
+        display:flex;
+        align-items:center;
+        gap:10px;
+        cursor:pointer;
+        height:50px;
+    }
+
+    .file-box input{
+        display:none;
+    }
+
+    .file-box img{
+        width:20px;
+        opacity:0.8;
+    }
+
+    .file-box span{
+        font-size:16px;
+        color:#555;
+    }
+
+    /* TWO COLUMN */
+    .two-col{
+        display:flex;
+        gap:60px;
+        margin-bottom:40px;
+        margin-left:20px;
+    }
+
+    .left, .right{
+        width:50%;
+    }
+
+    /* BUTTONS */
+    .btns{
+        text-align:center;
+        margin-top:40px;
+        margin-left:20px;
+    }
+
+    .cancel{
+        border:2px solid #ff6f6f;
+        background:white;
+        color:#ff6f6f;
+        padding:12px 40px;
+        border-radius:40px;
+        margin-right:20px;
+        cursor:pointer;
+        font-size:15px;
+    }
+
+    .submit{
+        background:#2ecc71;
+        color:white;
+        padding:12px 50px;
+        border:none;
+        border-radius:40px;
+        cursor:pointer;
+        font-size:15px;
+    }
+
+    /* FOOTER FIXED & CORRECTED */
+    footer{
+        margin-top:60px;
+        background:linear-gradient(to right, #1fc5e6, #2fd57a);
+        padding:60px 80px;
+        color:white;
+        height:380px;
+    }
+
+    footer .footer-flex{
+        display:flex;
+        justify-content:space-between;
+        flex-wrap:nowrap;    /* 🔥 FIX 1: NO WRAPPING */
+        gap:20px;
+    }
+
+    footer .col{
+        width:20%;           /* 🔥 FIX 2: FIT 4 COLUMNS IN ONE ROW */
+        min-width:150px;     /* 🔥 FIX 3: Make sure it never wraps */
+    }
+
+    .footer-logo{
+        width:160px;
+        margin-bottom:20px;
+    }
+
+    footer h3{
+        margin-bottom:15px;
+        font-size:20px;
+    }
+
+    footer p{
+        font-size:16px;
+        line-height:20px;
+        opacity:0.95;
+    }
+
+    footer a{
+        color:white;
+        text-decoration:none;
+        display:block;
+        margin-bottom:6px;
+        font-size:16px;
+        opacity:0.9;
+    }
+
+    footer .copy{
+        text-align:center;
+        margin-top:30px;
+        opacity:0.85;
+        font-size:16px;
+    }
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+
+    <h1>CREATE ACCOUNT</h1>
+    <p class="subtitle">
+        Please fill this form & let us know about services that you want to provide.
+    </p>
+
+    <!-- BASIC INFORMATION -->
+    <h2>BASIC INFORMATION</h2>
+    <p class="small">Please fill this form & let us know...</p>
+
+    <div class="two-col">
+
+        <!-- LEFT COLUMN -->
+        <div class="left">
+            <div class="field">
+                <label class="label">Owner/ Company Name</label>
+                <input class="input" type="text" placeholder="Enter Owner/Company Name">
+            </div>
+
+            <div class="field">
+                <label class="label">Alternative Number</label>
+                <input class="input" type="text" placeholder="Phone Number">
+            </div>
+
+            <div class="field">
+                <label class="label">Owner/ Authorized person Aadhaar</label>
+                <label class="file-box">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1828/1828492.png">
+                    <input type="file">
+                    <span>No file chosen</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div class="right">
+            <div class="field">
+                <label class="label">Email Address</label>
+                <input class="input" type="email" placeholder="Enter Email">
+            </div>
+
+            <div class="field">
+                <label class="label">Owner/ Authorized Person Photo</label>
+                <label class="file-box">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1828/1828492.png">
+                    <input type="file">
+                    <span>No file chosen</span>
+                </label>
+            </div>
+
+            <div class="field">
+                <label class="label">Owner/ Company PAN</label>
+                <label class="file-box">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1828/1828492.png">
+                    <input type="file">
+                    <span>No file chosen</span>
+                </label>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- BRAND INFORMATION -->
+    <h2>BRAND INFORMATION</h2>
+    <p class="small">Please fill this form & let us know...</p>
+
+    <div class="two-col">
+
+        <!-- LEFT -->
+        <div class="left">
+            <div class="field">
+                <label class="label">Brand Name</label>
+                <input class="input" type="text" placeholder="Enter Brand Name">
+            </div>
+
+            <div class="field">
+                <label class="label">Ownership</label>
+                <input class="input" type="text" placeholder="Ownership">
+            </div>
+
+            <div class="field">
+                <label class="label">State</label>
+                <input class="input" type="text" placeholder="State">
+            </div>
+
+            <div class="field">
+                <label class="label">City</label>
+                <input class="input" type="text" placeholder="City">
+            </div>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="right">
+            <div class="field">
+                <label class="label">Company</label>
+                <input class="input" type="text" placeholder="Enter Company">
+            </div>
+
+            <div class="field">
+                <label class="label">Office Address</label>
+                <input class="input" type="text" placeholder="Enter Address">
+            </div>
+
+            <div class="field">
+                <label class="label">Zip Code</label>
+                <input class="input" type="text" placeholder="Enter Zip Code">
+            </div>
+
+            <div class="field">
+                <label class="label">Company GST</label>
+                <input class="input" type="text" placeholder="(Optional)">
+            </div>
+        </div>
+
+    </div>
+
+    <div class="btns">
+        <button class="cancel">Cancel</button>
+        <button class="submit">Submit</button>
+    </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-flex">
+
+        <div class="col">
+            <img src="footer logo.png" class="footer-logo">
+            <p>In an industry witnessing expected growth, Travelkeet is truly carving a name for
+               itself by adding value to enjoyable vacation destinations.
+               We are not just building tourism facilities, we’re creating experiences.</p>
+        </div>
+
+        <div class="col">
+            <h3>COMPANY</h3>
+            <a href="#">Our Vehicles</a>
+            <a href="#">About Us</a>
+            <a href="#">Blogs</a>
+            <a href="#">FAQ</a>
+        </div>
+
+        <div class="col">
+            <h3>SERVICES</h3>
+            <a href="#">Campervan</a>
+            <a href="#">CPC</a>
+        </div>
+
+        <div class="col">
+            <h3>INFORMATION</h3>
+            <a href="#">Contact</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms & Conditions</a>
+        </div>
+
+    </div>
+
+    <p class="copy">© 2024 Copyright Travelkeet</p>
+</footer>
+
+</body>
+</html>
+<br>

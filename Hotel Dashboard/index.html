@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #fff;
+}
+
+/* ---------------- LEFT SIDEBAR ---------------- */
+.sidebar {
+    width: 230px;
+    height: 100vh;
+    background: #e9f7e9;
+    padding: 20px;
+    position: fixed;
+    left: 0;
+    top: 0;
+}
+
+.sidebar img {
+    width: 120px;
+    margin-bottom: 20px;
+}
+
+.menu-item {
+    padding: 10px;
+    margin: 6px 0;
+    border-radius: 6px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.menu-item:hover {
+    background: #d4f5d4;
+}
+
+.dropdown-arrow {
+    float: right;
+    font-size: 12px;
+}
+
+.dropdown-content {
+    display: none;
+    margin-left: 12px;
+}
+
+.dropdown-content div {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.dropdown-content div:hover {
+    background: #c8f7c8;
+}
+
+/* ---------------- TOP RIGHT ICONS ---------------- */
+.top-right {
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    display: flex;
+    gap: 20px;
+}
+
+.top-right img {
+    width: 30px;
+    cursor: pointer;
+}
+
+/* ---------------- MAIN CONTENT ---------------- */
+.main {
+    margin-left: 250px;
+    padding: 20px 40px;
+}
+
+.profile-title {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.services-row {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* ---------------- SERVICE DROPDOWN ---------------- */
+.dropdown-btn {
+    background: linear-gradient(to right, #23d98c, #2bb673);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.dropdown-services {
+    position: relative;
+}
+
+.dropdown-services-content {
+    display: none;
+    position: absolute;
+    top: 48px;
+    right: 0;
+    background: white;
+    width: 150px;
+    border-radius: 8px;
+    box-shadow: 0px 10px 20px rgba(0,0,0,0.15);
+    overflow: hidden;
+}
+
+/* each option */
+.dropdown-services-content div {
+    padding: 12px 14px;
+    cursor: pointer;
+    font-size: 15px;
+    color: #555;
+    transition: background 0.25s ease, color 0.25s ease;
+}
+
+/* GREEN MOVES ON HOVER */
+.dropdown-services-content div:hover {
+    background: linear-gradient(to right, #23d98c, #2bb673);
+    color: #ffffff;
+}
+
+/* ---------------- DASHBOARD GRID ---------------- */
+.grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 22px;
+    margin-top: 30px;
+}
+
+.card {
+    flex: 1;
+    min-width: 260px;
+    height: 120px;
+    padding: 18px;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+
+/* ---------------- GRAPH BOX ---------------- */
+.graph-box {
+    background: #e9f9f1;
+    padding: 25px;
+    border-radius: 12px;
+    margin-top: 30px;
+}
+
+#myChart {
+    width: 100% !important;
+    height: 310px !important;
+}
+</style>
+</head>
+<body>
+
+<!-- ---------------- SIDEBAR ---------------- -->
+<div class="sidebar">
+    <img src="logo.png">
+
+    <div class="menu-item">Dashboard</div>
+    <div class="menu-item">Service Management</div>
+    <div class="menu-item">Booking</div>
+    <div class="menu-item">Feature Package</div>
+
+    <div class="menu-item" onclick="toggleDropdown('revDD')">
+        Revenue <span class="dropdown-arrow">▼</span>
+    </div>
+    <div id="revDD" class="dropdown-content">
+        <div>Caravan Revenue</div>
+        <div>CFC Revenue</div>
+    </div>
+
+    <div class="menu-item" onclick="toggleDropdown('supportDD')">
+        Support Center <span class="dropdown-arrow">▼</span>
+    </div>
+    <div id="supportDD" class="dropdown-content">
+        <div>Account</div>
+        <div>Logout</div>
+    </div>
+</div>
+
+<!-- ---------------- TOP RIGHT ---------------- -->
+<div class="top-right">
+    <img src="bell.png">
+    <img src="profile.png">
+</div>
+
+<!-- ---------------- MAIN CONTENT ---------------- -->
+<div class="main">
+
+    <div class="profile-title">MONKEY : TV005</div>
+    <p><b>Profile Created :</b> Jan. 10, 2025, 6:48 p.m</p>
+    <p><b>Location :</b> IITM</p>
+
+    <!-- SERVICES -->
+    <div class="services-row">
+        <h2>SERVICES</h2>
+
+        <div class="dropdown-services">
+            <!-- DEFAULT BUTTON TEXT -->
+            <button class="dropdown-btn" id="serviceButton" onclick="toggleServiceDD()">Resort ▼</button>
+
+            <div id="servicesMenu" class="dropdown-services-content">
+                <div onclick="setService('Caravan')">Caravan</div>
+                <div onclick="setService('CFC')">CFC</div>
+                <div onclick="setService('Hotel')">Hotel</div>
+                <div onclick="setService('Resort')">Resort</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ---------------- CARDS ---------------- -->
+    <div class="grid">
+
+        <div id="cardCaravan" class="card" style="background:#e9fafa">
+            <b>Campervan</b><br>
+            <span style="font-size:22px;color:#42c7b3">1</span>
+        </div>
+
+        <div id="cardCFC" class="card" style="background:#fff9e8">
+            <b>CFC</b><br>
+            <span style="font-size:22px;color:#e8ad32">2</span>
+        </div>
+
+        <div id="cardTotal" class="card" style="background:#ffefe2">
+            <b>Total Booking</b><br>
+            <span style="font-size:40px;color:#ff7b19"><b>5</b></span><br>
+            <small>Increased By 7%</small>
+        </div>
+
+        <div id="cardHotel" class="card" style="background:#ffecec">
+            <b>Hotel</b><br>
+            <span style="font-size:22px;color:#ff6161">1</span>
+        </div>
+
+        <div id="cardResort" class="card" style="background:#ffeafb">
+            <b>Resort</b><br>
+            <span style="font-size:22px;color:#ff33cc">1</span>
+        </div>
+
+        <div id="cardWaiting" class="card" style="background:#ffebf7">
+            <b>Waiting Approval</b><br>
+            <span style="font-size:40px;color:#ff33cc"><b>0</b></span>
+        </div>
+    </div>
+
+    <!-- ---------------- GRAPH ---------------- -->
+    <div class="graph-box">
+        <canvas id="myChart"></canvas>
+    </div>
+
+</div>
+
+<!-- ---------------- GRAPH SCRIPT ---------------- -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+function toggleDropdown(id) {
+    const el = document.getElementById(id);
+    el.style.display = el.style.display === "block" ? "none" : "block";
+}
+
+function toggleServiceDD() {
+    const el = document.getElementById("servicesMenu");
+    el.style.display = el.style.display === "block" ? "none" : "block";
+}
+
+// ---------------- SERVICE DATA ----------------
+const serviceData = {
+    Caravan: { label: "Campervan", color: "#007bff", data: [200000,300000,250000,260000,240000,270000,320000] },
+    CFC: { label: "CFC", color: "#00c454", data: [180000,350000,300000,210000,340000,360000,410000] },
+    Hotel: { label: "Hotel", color: "#ff33cc", data: [150000,240000,350000,450000,230000,260000,380000] },
+    Resort: { label: "Resort", color: "#ff9933", data: [180000,240000,280000,620000,300000,270000,350000] }
+};
+
+// ---------------- CHART INIT — DEFAULT RESORT ----------------
+const ctx = document.getElementById("myChart").getContext("2d");
+
+const chart = new Chart(ctx, {
+    type: "line",
+    data: {
+        labels: ["January","February","March","April","May","June","July"],
+        datasets: [{
+            label: serviceData.Resort.label,
+            data: serviceData.Resort.data,
+            borderColor: serviceData.Resort.color,
+            backgroundColor: serviceData.Resort.color,
+            tension: 0.4,
+            pointRadius: 5
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false
+    }
+});
+
+// ---------------- SERVICE SWITCH ----------------
+function setService(name) {
+
+    document.getElementById("serviceButton").textContent = name + " ▼";
+    document.getElementById("servicesMenu").style.display = "none";
+
+    const conf = serviceData[name];
+    chart.data.datasets[0].label = conf.label;
+    chart.data.datasets[0].data = conf.data;
+    chart.data.datasets[0].borderColor = conf.color;
+    chart.data.datasets[0].backgroundColor = conf.color;
+    chart.update();
+}
+
+// ---------------- SET DEFAULT RESORT ----------------
+setService("Resort");
+</script>
+
+</body>
+</html>

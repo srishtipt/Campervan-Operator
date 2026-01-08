@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Request - TravelKeet</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', Arial, sans-serif;
+            background-color: #f8f8f8;
+            display: flex;
+        }
+
+        /* ================= SIDEBAR ================= */
+
+        .sidebar {
+            width: 240px;
+            background: #ffffff;
+            border-right: 1px solid #e5e7eb;
+            padding: 20px 0;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            overflow-y: auto;
+        }
+
+        .logo-container {
+            padding: 0 20px 25px 20px;
+        }
+
+        .logo-container svg {
+            width: 170px;
+            height: auto;
+        }
+
+        .menu-section {
+            margin-top: 10px;
+        }
+
+        .menu-item {
+            padding: 12px 20px;
+            font-size: 18px;
+            font-weight: 500;
+            color: #111827;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .menu-item:hover {
+            background-color: #f3f4f6;
+        }
+
+        .menu-item.active {
+            background-color: #10b981;
+            color: #ffffff;
+        }
+
+        .menu-item.parent {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .submenu {
+            background: #f9fafb;
+        }
+
+        .submenu-item {
+            padding: 8px 40px;
+            font-size: 17px;
+            color: #374151;
+            cursor: pointer;
+        }
+
+        .submenu-item:hover {
+            background-color: #f3f4f6;
+        }
+
+        .submenu-item.active {
+            background-color: #34d399;
+            color: #ffffff;
+        }
+
+        /* =============== MAIN WRAPPER (RIGHT SIDE) =============== */
+
+        .main-wrapper {
+            margin-left: 240px;       /* space for sidebar */
+            flex: 1;
+            padding: 0px;
+            padding-top: 10px;
+        }
+
+        /* =============== HEADER (breadcrumb style) =============== */
+
+        .header {
+            width: 100%;
+            max-width: none;
+            margin: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 30px;
+            background: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-text h1 {
+            font-size: 26px;
+            font-weight: 600;
+            color: #10b981;
+            margin-bottom: 4px;
+        }
+
+        .header-text p {
+            font-size: 14px;
+            color: #9ca3af;
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .notification-icon {
+            background-color: transparent;
+        }
+
+        .notification-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: #10b981;
+        }
+
+        .profile-icon {
+            background-color: #10b981;
+        }
+
+        .profile-icon svg {
+            width: 22px;
+            height: 22px;
+            fill: #ffffff;
+        }
+
+        /* Main white content card under header */
+
+        .content {
+            background-color: #ffffff;
+            padding: 35px 40px;
+            max-width: none;
+            margin: 0;
+            border-radius: 0;
+            box-shadow: none;
+        }
+
+        /* Top Section */
+        .top-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 35px;
+        }
+
+        .booking-info h1 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+        }
+
+        .info-item {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 3px;
+        }
+
+        .info-item strong {
+            font-weight: 600;
+        }
+
+        .download-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            color: #333;
+            cursor: pointer;
+            padding: 8px 0;
+        }
+
+        .download-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: #333;
+        }
+
+        .download-btn:hover {
+            color: #5dd5a7;
+        }
+
+        .download-btn:hover svg {
+            fill: #5dd5a7;
+        }
+
+        /* Payment ID Section */
+        .payment-id-section {
+            margin-bottom: 30px;
+        }
+
+        .payment-id-section h2 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+        }
+
+        /* Details Grid */
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px 60px;
+            margin-bottom: 35px;
+        }
+
+        .detail-item {
+            display: flex;
+        }
+
+        .detail-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a1a1a;
+            min-width: 160px;
+        }
+
+        .detail-value {
+            font-size: 14px;
+            color: #333;
+            font-weight: 400;
+        }
+
+        .image-link {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #2196F3;
+            text-decoration: none;
+            font-weight: 400;
+            cursor: pointer;
+        }
+
+        .image-link svg {
+            width: 18px;
+            height: 18px;
+            fill: #2196F3;
+        }
+
+        /* Payment Details Section */
+        .payment-details-section h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+        }
+
+        /* Table */
+        .table-container {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background-color: #e8f5ef;
+        }
+
+        th {
+            padding: 14px 20px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 600;
+            color: #1a1a1a;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        th:last-child {
+            text-align: right;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        td {
+            padding: 14px 20px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        td:last-child {
+            text-align: right;
+            font-weight: 500;
+        }
+
+        .total-row {
+            background-color: #fafafa;
+            font-weight: 600;
+        }
+
+        .total-row td {
+            font-weight: 600;
+            color: #1a1a1a;
+            padding: 16px 20px;
+        }
+
+        .grand-total-row {
+            background-color: #f5f5f5;
+        }
+
+        .grand-total-row td {
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .operator-total-row {
+            background-color: #e8f5ef;
+        }
+
+        .operator-total-row td {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        /* ======== IMAGE MODAL (FULL SCREEN POPUP) ======== */
+
+        .image-modal {
+            display: none;            /* hidden by default */
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .image-modal-content {
+            max-width: 95%;
+            max-height: 95%;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .image-modal-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 32px;
+            color: #ffffff;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .main-wrapper {
+                margin-left: 0;
+            }
+
+            .sidebar {
+                position: static;
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid #e5e7eb;
+            }
+
+            body {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+
+            .top-section {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .details-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .detail-label {
+                min-width: 140px;
+            }
+
+            .table-container {
+                overflow-x: auto;
+            }
+
+            table {
+                min-width: 600px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========== SIDEBAR ========== -->
+    <div class="sidebar">
+        <div class="logo-container">
+            <svg viewBox="0 10 400 300" xmlns="http://www.w3.org/2000/svg">
+                <image href="images/Vector.png"
+                       x="0" y="-48"
+                       width="390" height="400"
+                       preserveAspectRatio="xMidYMid meet" />
+            </svg>
+        </div>
+
+        <div class="menu-section">
+            <div class="menu-item">Dashboard</div>
+            <div class="menu-item">Operators</div>
+            <div class="menu-item">Feature Package</div>
+            <div class="menu-item">Advertisement</div>
+            <div class="menu-item">Bookings</div>
+            <div class="menu-item">Customers</div>
+
+            <div class="menu-item parent">
+                <span>Revenue</span>
+                <span>▲</span>
+            </div>
+            <div class="submenu">
+                <div class="submenu-item">Analytics</div>
+                <div class="submenu-item">Manual Analytics</div>
+                <div class="submenu-item">Payment</div>
+                <div class="submenu-item active">Payment Request</div>
+                <div class="submenu-item">Reports</div>
+            </div>
+
+            <div class="menu-item parent" style="margin-top:8px;">
+                <span>Settings</span>
+                <span>▼</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== MAIN RIGHT SIDE ========== -->
+    <div class="main-wrapper">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-text">
+                <h1>Revenue › Payment Request</h1>
+                <p>Review and process pending payment requests efficiently</p>
+            </div>
+
+            <div class="header-icons">
+                <div class="icon-btn notification-icon">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5S10.5 3.17 10.5 4v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"/>
+                    </svg>
+                </div>
+                <div class="icon-btn profile-icon">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content">
+            <!-- Top Section -->
+            <div class="top-section">
+                <div class="booking-info">
+                    <h1>MONKEY : TV005</h1>
+                    <div class="info-item"><strong>Profile Created :</strong> Jan. 10, 2025, 6:48 p.m</div>
+                    <div class="info-item"><strong>Location :</strong> IITM</div>
+                </div>
+                <div class="download-btn">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                    </svg>
+                    <span>Download</span>
+                </div>
+            </div>
+
+            <!-- Payment ID Section -->
+            <div class="payment-id-section">
+                <h2>Payment ID : CV34567</h2>
+            </div>
+
+            <!-- Details Grid -->
+            <div class="details-grid">
+                <div class="detail-item">
+                    <span class="detail-label">Customer Name:</span>
+                    <span class="detail-value">Manju</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Destination:</span>
+                    <span class="detail-value">Ooty</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Starting Date:</span>
+                    <span class="detail-value">9/10/2025</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">End date:</span>
+                    <span class="detail-value">13/10/2025</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Booking ID:</span>
+                    <span class="detail-value">TRAVELKT29</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Mode of Payment:</span>
+                    <span class="detail-value">UPI</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Transaction ID:</span>
+                    <span class="detail-value">19089678956</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Transaction Screenshot :</span>
+                    <!-- CLICKABLE IMAGE LINK -->
+                    <a href="images/transaction.png"
+                       class="image-link"
+                       id="screenshotLink"
+                       data-image="images/transaction.png">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+                        </svg>
+                        image
+                    </a>
+                </div>
+            </div>
+
+            <!-- Payment Details Section -->
+            <div class="payment-details-section">
+                <h3>Payment Details</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>S.NO</th>
+                                <th>DESCRIPTION</th>
+                                <th>AMOUNT</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1.</td>
+                                <td>Total Cost For This Trip</td>
+                                <td>35,000/-</td>
+                            </tr>
+                            <tr>
+                                <td>2.</td>
+                                <td>GST Amount (18%) For This Trip</td>
+                                <td>6,300/-</td>
+                            </tr>
+                            <tr>
+                                <td>3.</td>
+                                <td>Extra Kms Charge</td>
+                                <td>1,000/-</td>
+                            </tr>
+                            <tr>
+                                <td>4.</td>
+                                <td>GST Amount (18%) For Extra Kms Charge</td>
+                                <td>90/-</td>
+                            </tr>
+                            <tr>
+                                <td>5.</td>
+                                <td>Additional Charges</td>
+                                <td>100/-</td>
+                            </tr>
+                            <tr>
+                                <td>6.</td>
+                                <td>Discount Amount</td>
+                                <td>500/-</td>
+                            </tr>
+                            <tr class="grand-total-row">
+                                <td colspan="2">GRAND TOTAL</td>
+                                <td>42,990/-</td>
+                            </tr>
+                            <tr class="total-row">
+                                <td colspan="2">AMOUNT PAID</td>
+                                <td>42,990/-</td>
+                            </tr>
+                            <tr class="total-row">
+                                <td colspan="2">TRAVELKEET COMMISSION (15%)</td>
+                                <td>12,500/-</td>
+                            </tr>
+                            <tr class="operator-total-row">
+                                <td colspan="2">OPERATOR GRAND TOTAL</td>
+                                <td>30,490/-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ======== FULL SCREEN IMAGE MODAL ======== -->
+    <div class="image-modal" id="imageModal">
+        <span class="image-modal-close" id="imageModalClose">&times;</span>
+        <img class="image-modal-content" id="modalImg" alt="Transaction Screenshot">
+    </div>
+
+    <script>
+        // Open modal on "image" click
+        const screenshotLink = document.getElementById('screenshotLink');
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImg');
+        const modalClose = document.getElementById('imageModalClose');
+
+        if (screenshotLink) {
+            screenshotLink.addEventListener('click', function (e) {
+                e.preventDefault();
+                const imgSrc = this.dataset.image || this.href;
+                modalImg.src = imgSrc;
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden'; // prevent background scroll
+            });
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+            document.body.style.overflow = '';
+        }
+
+        modalClose.addEventListener('click', closeModal);
+
+        // close when clicking outside the image
+        modal.addEventListener('click', function (e) {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+    </script>
+
+</body>
+</html>
